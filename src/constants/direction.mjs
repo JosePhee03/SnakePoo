@@ -1,0 +1,13 @@
+export const DIRECTION = {
+  LEFT: 'ArrowLeft',
+  RIGHT: 'ArrowRight',
+  DOWN: 'ArrowDown',
+  UP: 'ArrowUp'
+}
+
+export const OPOSITE_DIRECTION = {
+  [DIRECTION.DOWN]: DIRECTION.UP,
+  [DIRECTION.UP]: DIRECTION.DOWN,
+  [DIRECTION.RIGHT]: DIRECTION.LEFT,
+  [DIRECTION.LEFT]: DIRECTION.RIGHT,
+}

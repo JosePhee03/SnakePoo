@@ -1,0 +1,11 @@
+{
+  "editor.defaultFormatter": "dbaeumer.vscode-eslint",
+  "editor.tabSize": 2,
+  "files.eol": "\n",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  },
+  "[jsonc]": {
+    "editor.defaultFormatter": "vscode.json-language-features"
+  }
+}
