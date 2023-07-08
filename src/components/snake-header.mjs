@@ -11,6 +11,9 @@ import Icons from './icons.mjs'
 
 class SnakeHeader extends HTMLElement {
 
+  /** @type { HTMLButtonElement } */
+  _buttonPause
+
   constructor () {
     super()
     store.subscribe(OBSERVER.SCORE, this.updateScore.bind(this))
@@ -100,30 +103,42 @@ class SnakeHeader extends HTMLElement {
   }
 
   handleEvent (event) {
-    if (event.type === 'click') {
+
+    switch (event.type) {
+    case 'click':
       if (event.target.id === 'button-pause') {
         store.setState(OBSERVER.STATUS, STATUS.PAUSE)
       }
+      break
+    case 'keydown':
+      if (event.key === 'Escape') {
+        if (this._buttonPause.getAttribute('disabled')) break
+        store.setState(OBSERVER.STATUS, STATUS.PAUSE)
+      }
+      break
     }
   }
 
   updateButtons (status) {
-    const buttonPause = this.querySelector('#button-pause')
     if (status === STATUS.START) {
-      buttonPause?.removeAttribute('disabled')
+      this._buttonPause.removeAttribute('disabled')
     } else {
-      buttonPause?.setAttribute('disabled', 'true')
+      this._buttonPause.setAttribute('disabled', 'true')
     }
   }
 
   connectedCallback () {
     this.render()
+
+    const buttonPause = this.querySelector('#button-pause')
+    if (buttonPause instanceof HTMLButtonElement) {
+      this._buttonPause = buttonPause
+      this._buttonPause.addEventListener('click', this)
+    }
+    window.addEventListener('keydown', this)
+
     this.updateScore(`${state.score}`)
     this.updateButtons(state.status)
-    const buttonPause = this.querySelector('#button-pause')
-    if (buttonPause instanceof Element) {
-      buttonPause.addEventListener('click', this)
-    }
   }
 
   render () {

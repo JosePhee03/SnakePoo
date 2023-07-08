@@ -22,23 +22,44 @@ export default class SnakeStatusBox extends HTMLElement {
   get styles () {
     return /* html */`
       <style>
+
         .back {
           position: absolute;
+          width: 100%;
+          height: 100%;
           display: flex;
           justify-content: center;
           align-items: center;
-          width: 100%;
-          height: 100%
+          top: 0
         }
         .box {
-          padding: 30px;
           display: flex;
+          justify-content: center;
+          align-items: center;
           flex-direction: column;
-          gap: 20px;
-          background: white;
+          gap: 2rem;
         }
         #button-game {
-          padding: 4px;
+          padding: 0.4rem 1.4rem;
+          width: min-content;
+          color: var(--white);
+          filter: var(--shadow);
+          background: none;
+          font-family: 'Press Start 2P', cursive;
+          font-size: 1rem;
+          border-radius: 0.2rem;
+          border: solid 0.2rem var(--white);
+        }
+
+        #button-game:hover {
+          cursor: pointer;
+          background: var(--hover);
+        }
+
+        #box-title {
+          font-size: 1.4rem;
+          color: var(--white);
+          filter: var(--shadow);
         }
       </style>
     `
@@ -67,6 +88,11 @@ export default class SnakeStatusBox extends HTMLElement {
 
   openModal () {
     this.style.display = 'block'
+
+    const buttonGame = this.querySelector('#button-game')
+    if (buttonGame instanceof HTMLButtonElement) {
+      buttonGame.focus()
+    }
   }
 
   /** @param { string } status */
@@ -87,6 +113,7 @@ export default class SnakeStatusBox extends HTMLElement {
 
   connectedCallback () {
     this.render()
+
     this.updateTitle(state.status)
     const buttonGame = this.querySelector('#button-game')
 

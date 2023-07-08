@@ -14,7 +14,6 @@ export default class Subject {
     }
 
     this.observers[key].push(value)
-    console.log(this.observers)
   }
 
   unsubscribe (obs) {

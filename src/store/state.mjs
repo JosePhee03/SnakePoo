@@ -8,7 +8,7 @@ const initialState = {
   size: 10,
   snakeColor: '#F000F2',
   foodColor: '#0F0',
-  speed: 10,
+  speed: 100,
   score: 0
 }
 

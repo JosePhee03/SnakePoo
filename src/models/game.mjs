@@ -19,30 +19,24 @@ export class Game {
   /** @type { string } */
   direction = DIRECTION.RIGHT
   /** @type { number } */
-  speed = 100
-  /** @type { number } */
   score = 0
-  /** @type { Snake } */
-  _snake
-  /** @type { Food } */
-  _food
 
   /**
    * @param { CanvasRenderingContext2D } context
    */
 
   constructor (context) {
-    const { width, height, size } = state
+    const { width, height, size, speed } = state
 
     this._width = width
     this._height = height
     this._sizeX = width / size
-    this._sizeY = height / size
+    this._sizeY = width / size
     this._context = context
     this._draw = new Draw(context)
     this._snake = new Snake()
     this._food = new Food(this._sizeX, this._sizeY)
-
+    this._speed = speed
     document.addEventListener('change-direction',
     /** @param { * } event */
       (event) => {
@@ -148,19 +142,10 @@ export class Game {
           this._sizeX,
           this._sizeY,
         )
-        console.log([
-          this._snake.body,
-          this._food.position,
-          this._width,
-          this._height,
-          this._sizeX,
-          this._sizeY,
-          this.status
-        ])
         if (this.status !== STATUS.START) {
           clearInterval(gameInterval)
         }
-      }, this.speed)
+      }, this._speed)
     }
 
   }

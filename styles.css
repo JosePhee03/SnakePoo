@@ -7,6 +7,7 @@
 
   --shadow: drop-shadow(0 0 2px var(--white));
   --hover: #FFFFFF10;
+  --opacity-80: #FFFFFF80 
 }
 
 * {

@@ -34,7 +34,6 @@ class SnakeApp extends HTMLElement {
       const snakeCanvas = document.querySelector('snake-canvas')
       if (snakeCanvas instanceof SnakeCanvas) {
         const context = snakeCanvas.canvas.getContext('2d')
-
         if (context instanceof CanvasRenderingContext2D) {
           const game = new Game(context)
           store.subscribe(OBSERVER.STATUS, game.updateStatus.bind(game))

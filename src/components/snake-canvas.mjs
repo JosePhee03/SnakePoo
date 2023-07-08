@@ -1,57 +1,31 @@
 // @ts-check
 
-const attribute = {
-  WIDTH: 'width',
-  HEIGHT: 'height',
-}
+import { OBSERVER } from '../constants/observer.mjs'
+import { state, store } from '../store/state.mjs'
 
 export default class SnakeCanvas extends HTMLElement {
 
-  /** @type { number } */
-  _height
-  /** @type { number } */
-  _width
-  /** @type { HTMLCanvasElement } */
-  _canvas = document.createElement('canvas')
-
   constructor () {
     super()
+    store.subscribe(OBSERVER.WIDTH, this.render.bind(this))
+    this._canvas = document.createElement('canvas')
   }
 
   get canvas () {
     return this._canvas
   }
 
-  get width () {
-    const widthAtrr = this.getAttribute(attribute.WIDTH)
-    return Number(widthAtrr)
-  }
-
-  get height () {
-    const heightAtrr = this.getAttribute(attribute.HEIGHT)
-    return Number(heightAtrr)
-  }
-
-  /** @param { number } width */
-  set width (width) {
-    this.setAttribute(attribute.WIDTH, `${width}`)
-  }
-
-  /** @param { number } height */
-  set height (height) {
-    this.setAttribute(attribute.HEIGHT, `${height}`)
-  }
-
   get styles () {
     return /* html */`
       <style>
-        :host {
+        .backdrop {
           position: relative;
         }
         canvas {
-          background: radial-gradient(circle, #4f46e4 5%, transparent 11%);
-          background-size: ${this.width / 10}px ${this.width / 10}px;
-          background-color: #FFFFFF00;
+          background: radial-gradient(circle, var(--opacity-80) 5%, transparent 11%);
+          background-size: ${state.width / state.size}px ${state.width / state.size}px;
+          box-shadow: inset 0 0 10px var(--opacity-80);
+          border-radius: 0 0 0.25rem 0.25rem;
         }
       </style>
     `
@@ -59,41 +33,25 @@ export default class SnakeCanvas extends HTMLElement {
 
   connectedCallback () {
     this.render()
-
-    this.style.position = 'relative'
     this.style.lineHeight = '0'
-    this.style.overflow = 'hidden'
-    this.width = 360
-    this.height = 360
   }
 
-  static get observedAttributes () {
-    return [ attribute.WIDTH, attribute.HEIGHT ]
-  }
-
-  attributeChangedCallback (attributes, previusValue, currentValue) {
-    if (this.isConnected) {
-      switch (attributes) {
-      case attribute.WIDTH:
-        this._width = currentValue
-        break
-      case attribute.HEIGHT:
-        this._height = currentValue
-        break
-      default:
-        throw new Error('Atributo no encontrado')
-      }
-    }
-
-    this.render()
+  get template () {
+    return /* html */`
+      <div class="backdrop">
+        <snake-status-box></snake-status-box>
+      </div>
+    `
   }
 
   render () {
-    this.innerHTML = `${this.styles}<snake-status-box></snake-status-box>`
-    this.appendChild(this.canvas)
-
-    this.canvas.setAttribute(attribute.WIDTH, `${this._width}`)
-    this.canvas.setAttribute(attribute.HEIGHT, `${this._height}`)
+    this.innerHTML = `${this.styles}${this.template}`
+    const backdrop = this.querySelector('.backdrop')
+    if (backdrop instanceof HTMLElement) {
+      this._canvas.setAttribute('width', `${state.width}`)
+      this._canvas.setAttribute('height', `${state.height}`)
+      backdrop.appendChild(this._canvas)
+    }
   }
 
 }
